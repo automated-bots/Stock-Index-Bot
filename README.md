@@ -1,4 +1,4 @@
-# Market Alert Bot
+# Stock Index Alert Bot
 
 `index-bot` is an open-source stock (forex) bot that uses the the following data to notify the user via Telegram.
 
