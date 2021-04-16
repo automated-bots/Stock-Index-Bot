@@ -5,7 +5,7 @@ const csv = require('fast-csv')
 const fs = require('fs')
 
 // Dump CSV debug data (true/false)
-const DEBUG = true
+const DEBUG = false
 
 class DataProcessor {
   /**
