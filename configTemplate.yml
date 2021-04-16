@@ -3,7 +3,7 @@ exchange_settings:
   apiKey: "" # Twelve Data Key
  
 telegram_settings:
-  bot_token: "" # Telegram token you receive from @BotFather: 1104044500:AAEt0CI4_ZneVx2RJQXlFFfmaWYBW5EYMdA
+  bot_token: "" # Telegram token you receive from @BotFather
   public_url: "https://" # Telegram public URL for Webhook
   chat_id: "@" # Telegram chat ID to send to (eg. @channel_name)
   
