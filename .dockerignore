@@ -4,6 +4,8 @@ node_modules
 Dockerfile
 CODEOWNERS
 
+/tmp-stock.json
+/tmp-vol.json
 /cachedData.json
 /cachedDataWeekly.json
 config.yml

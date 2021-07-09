@@ -14,7 +14,7 @@ tickers:
       interval: "5min" # Intraday time series of 5 min. interval (within a day period, see intraday_interval)
       outputsize: 100
       # Note: NYSE market: 6,5 hours open = 390 min./5 min. interval = 78 data points (which will fit within the 100 latest data points)
-    cron_time: "0 15 12,16 * * 1-5" # Notation: Second-Minute-Hour-Day-Month-WeekDay. So, at 12:15:00 and 16:15:00 hours from Monday through Friday    
+    cron_time: "0 20 16 * * 1-5" # Notation: Second-Minute-Hour-Day-Month-WeekDay. So: every Monday through Friday at 16:20 hours
     cron_timezone: "America/New_York" # NYSE is in New York
     # Extra settings for volatility check
     alerts: # Note: Lower checks on <, higher checks on >=
@@ -27,7 +27,7 @@ tickers:
       symbol: "GSPC" # The S&P 500 Index
       interval: "1week" # Weekly time series
       outputsize: 100
-    cron_time: "0 20 16 * * 5" # Notation: Second-Minute-Hour-Day-Month-WeekDay. So, at every Friday at 16:20:00 hours (when market is closed)
+    cron_time: "0 10 12,17 * * 1-5" # Notation: Second-Minute-Hour-Day-Month-WeekDay. So: every Monday through Friday at 12:20 and 17:00 hours
     cron_timezone: "America/New_York" # NYSE is in New York
     # Extra settings for stock market check
     indicators:

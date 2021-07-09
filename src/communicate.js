@@ -1,5 +1,8 @@
 const AlertLevels = require('./alertLevelsEnum')
 const Util = require('./util')
+const fs = require('fs')
+const TEMP_VOL_FILE = './tmp-vol.json'
+const TEMP_STOCK_FILE = './tmp-stock.json'
 
 class Communicate {
   /**
@@ -11,13 +14,9 @@ class Communicate {
     this.bot = bot
     this.volatilityAlerts = volatilityAlerts
     this.botChatID = botChatID
-    // Don't spam the channel, save the previous alert to compare for changes
-    this.prevVolatilityAlertLevel = AlertLevels.NO_ALERT
-    // Don't spam the channel, save the last MACD cross send-out
-    this.prevLastCrossTime = 0
     this.sendMessageOptions = { parse_mode: 'markdown', disable_web_page_preview: true }
     // Notify channel about Bot booting-up (commented-out for now)
-    this.sendTelegramMessage('Starting-up Bot... 🤓')
+    this.sendTelegramMessage('(Re)starting-up Bot... 🤓')
   }
 
   /**
@@ -27,20 +26,28 @@ class Communicate {
    * @param {Object} result Volatility result structure
    */
   sendVolatilityUpdate (result) {
-    let messageSend = false
+    let sendMessage = false
+    const currentLatestTime = result.latest_time.getTime()
     let message = '❗*Stock Alert*❗\n^VIX ticker changed alert level: '
     // Inform the user regarding the change in alert level
     message += this.volatilityAlertToString(result.level)
 
-    if (result.alert && result.level !== AlertLevels.NO_ALERT) {
-      if (this.prevVolatilityAlertLevel !== result.level) {
+    if (fs.existsSync(TEMP_VOL_FILE)) {
+      const data = this.readContent(TEMP_VOL_FILE)
+      sendMessage = ((data.level !== result.level) && (currentLatestTime > data.time))
+    } else {
+      sendMessage = true // Always send a message the first time, if file does not yet exists.
+    }
+
+    if (sendMessage) {
+      if (result.alert && result.level !== AlertLevels.NO_ALERT) {
         message += '\n\n'
         const dateString = Util.dateToString(result.latest_time)
         message += `CBOE Volatility Index (^VIX): *${result.percentage}%*. Latest Close: ${result.latest_close_price}. Latest date: ${dateString}.`
         if (result.all_points) {
           message += ' _Market is closed now._'
         }
-        message += '\n\n[Open ^VIX Chart](https://finance.yahoo.com/chart/^VIX)'
+        message += '\n\n[Open ^VIX Chart](https://www.tradingview.com/chart?symbol=TVC%3AVIX)'
         this.sendTelegramMessage(message)
 
         // Process dual-alert (if applicable)
@@ -50,21 +57,20 @@ class Communicate {
           dualMessage += `CBOE Volatility Index (^VIX): *${result.dual_alert.percentage}%*`
           this.sendTelegramMessage(dualMessage)
         }
-        // Set current level as previous
-        this.prevVolatilityAlertLevel = result.level
-        messageSend = true
+      } else {
+        // Back to normal: curently no alert and still a change in alert level (with respect to previous alert level)
+        this.sendTelegramMessage(message)
       }
     } else {
-      // Back to normal: curently no alert and still a change in alert level (with respect to previous alert level)
-      if (this.prevVolatilityAlertLevel !== result.level) {
-        this.sendTelegramMessage(message)
-        messageSend = true
-      }
+      console.log('DEBUG: No new volatility change detected. Do not send a message.')
     }
 
-    if (messageSend === false) {
-      console.log('DEBUG: No VIX change detected. Don\'t send a message update.')
+    // Write data to disk
+    const volatilTempData = {
+      level: result.level,
+      time: currentLatestTime
     }
+    this.writeContent(TEMP_VOL_FILE, volatilTempData)
   }
 
   /**
@@ -74,12 +80,21 @@ class Communicate {
    * @param {Object} result Stock market result structure
    */
   sendStockMarketUpdate (result) {
-    let messageSend = false
+    let messageSent = false
     for (const cross of result.crosses) {
+      let sendMessage = false
       // Only send messages that are newer that the previous send onces (don't spam)
       const currentTime = cross.time.getTime()
-      if (currentTime > this.prevLastCrossTime) {
-        let message = '❗*Stock Alert*❗\nS&P 500 index (^GSPC) changed in market trend: '
+
+      if (fs.existsSync(TEMP_STOCK_FILE)) {
+        const data = this.readContent(TEMP_STOCK_FILE)
+        sendMessage = (currentTime > data.time)
+      } else {
+        sendMessage = true // Always send a message the first time, if file does not yet exists.
+      }
+
+      if (sendMessage) {
+        let message = '❗*Stock Alert*❗\nS&P 500 index (^SPX) changed in market trend: '
         const dateString = Util.dateToString(cross.time, true)
         const histogram = cross.hist.toFixed(4)
         const prevHistogram = cross.prevHist.toFixed(4)
@@ -89,22 +104,24 @@ class Communicate {
         switch (cross.type) {
           case 'bearish':
             message += 'towards a bearish trend 🌧.'
-            message += `\n\nHistogram: ${histogram}% (before: ${prevHistogram}%). High: ${high}. Low: ${low}. Close: ${close}. MACD cross date: ${dateString}.`
-            message += '\n\n[Open ^GSPC Chart](https://finance.yahoo.com/chart/^GSPC)'
             break
           case 'bullish':
             message += 'towards a bullish trend 🔆!'
-            message += `\n\nHistogram: ${histogram}% (before: ${prevHistogram}%). High: ${high}. Low: ${low}. Close: ${close}. MACD cross date: ${dateString}.`
-            message += '\n\n[Open ^GSPC Chart](https://finance.yahoo.com/chart/^GSPC)'
             break
         }
+        message += `\n\nHistogram: ${histogram}% (before: ${prevHistogram}%). High: ${high}. Low: ${low}. Close: ${close}. MACD cross date: ${dateString}.`
+        message += '\n\n[Open ^SPX Chart](https://www.tradingview.com/chart?symbol=SP%3ASPX)'
         this.sendTelegramMessage(message)
-        this.prevLastCrossTime = currentTime
-        messageSend = true
+        messageSent = true // Only for debug logging
+
+        // Write data to disk
+        this.writeContent(TEMP_STOCK_FILE, {
+          time: currentTime
+        })
       }
     }
-    if (messageSend === false) {
-      console.log('DEBUG: No GSPC crosses detected. Don\'t send a message update.')
+    if (messageSent === false) {
+      console.log('DEBUG: No new S&P500 index crosses detected. Do not send a message update.')
     }
   }
 
@@ -137,6 +154,26 @@ class Communicate {
         return `Extreme high limit threshold (${this.volatilityAlerts.extreme_high_threshold}%) of ^VIX has been reached.`
       default:
         return 'Error: Unknown alert level?'
+    }
+  }
+
+  readContent (fileName) {
+    let data = {}
+    try {
+      const raw = fs.readFileSync(fileName)
+      data = JSON.parse(raw)
+    } catch (err) {
+      console.error(err)
+    }
+    return data
+  }
+
+  writeContent (fileName, content) {
+    const data = JSON.stringify(content)
+    try {
+      fs.writeFileSync(fileName, data)
+    } catch (err) {
+      console.error(err)
     }
   }
 }
