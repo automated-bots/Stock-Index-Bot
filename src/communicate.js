@@ -157,6 +157,11 @@ class Communicate {
     }
   }
 
+  /**
+   * Read content from file
+   * @param {String} fileName file name
+   * @returns content
+   */
   readContent (fileName) {
     let data = {}
     try {
@@ -168,6 +173,11 @@ class Communicate {
     return data
   }
 
+  /**
+   * Write content to file
+   * @param {String} fileName file name
+   * @param {Object} content data
+   */
   writeContent (fileName, content) {
     const data = JSON.stringify(content)
     try {
