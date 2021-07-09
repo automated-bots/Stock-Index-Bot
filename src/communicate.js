@@ -1,8 +1,8 @@
 const AlertLevels = require('./alertLevelsEnum')
 const Util = require('./util')
 const fs = require('fs')
-const TEMP_VOL_FILE = './tmp-vol.json'
-const TEMP_STOCK_FILE = './tmp-stock.json'
+const TEMP_VOL_FILE = './tmp/tmp-vol-data.json'
+const TEMP_STOCK_FILE = './tmp/tmp-stock-data.json'
 
 class Communicate {
   /**
