@@ -27,7 +27,7 @@ tickers:
       symbol: "GSPC" # The S&P 500 Index
       interval: "1week" # Weekly time series
       outputsize: 100
-    cron_time: "0 10 12,17 * * 1-5" # Notation: Second-Minute-Hour-Day-Month-WeekDay. So: every Monday through Friday at 12:20 and 17:00 hours
+    cron_time: "0 10 12,17 * * 1-5" # Notation: Second-Minute-Hour-Day-Month-WeekDay. So: every Monday through Friday at 12:10 and 17:10 hours
     cron_timezone: "America/New_York" # NYSE is in New York
     # Extra settings for stock market check
     indicators:
