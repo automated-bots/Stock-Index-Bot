@@ -67,11 +67,10 @@ app.get(`/test_api/${TEST_API_SECRET_HASH}/stock`, (req, res) => {
 })
 
 app.get('/health', (req, res) => {
-  // Check if there are any issues with the communication layer 
+  // Check if there are any issues with the communication layer
   const isError = comm.isError()
   const statusCode = (isError) ? 500 : 200
   res.status(statusCode).json({ health_ok: !isError })
-  res.json({ health_ok: comm.isError() })
 })
 
 // Simple ping command
