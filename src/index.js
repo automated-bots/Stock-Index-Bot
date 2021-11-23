@@ -33,12 +33,18 @@ console.log('INFO: GSPC index Cron time: \'' + cfg.tickers.stockmarket.cron_time
 
 // Setup Telegram bot
 const bot = new TelegramBot(cfg.telegram_settings.bot_token)
-
 // Inform the Telegram servers of the new webhook url
 bot.setWebHook(`${cfg.telegram_settings.public_url}/bot${TELEGRAM_SECRET_HASH}`)
 
-const app = express()
+// Create API Fetcher, data processor and communication instances
+const fetcher = new Fetcher(cfg.exchange_settings)
+const dataProcessor = new DataProcessor(cfg.tickers.volatility.alerts,
+  cfg.tickers.stockmarket.warmup_period,
+  cfg.tickers.stockmarket.data_period,
+  cfg.tickers.stockmarket.indicators)
+const comm = new Communicate(bot, cfg.tickers.volatility.alerts, cfg.telegram_settings.chat_id)
 
+const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
@@ -60,9 +66,12 @@ app.get(`/test_api/${TEST_API_SECRET_HASH}/stock`, (req, res) => {
   res.send('OK')
 })
 
-// Start Express Server
-app.listen(port, host, () => {
-  console.log(`INFO: Market Alert Index Bot v${version} is now running on ${host} on port ${port}.`)
+app.get('/health', (req, res) => {
+  // Check if there are any issues with the communication layer 
+  const isError = comm.isError()
+  const statusCode = (isError) ? 500 : 200
+  res.status(statusCode).json({ health_ok: !isError })
+  res.json({ health_ok: comm.isError() })
 })
 
 // Simple ping command
@@ -82,13 +91,10 @@ bot.sendMessage = (a, b, c) => {
 }
 */
 
-// Create API Fetcher, data processor and communication instances
-const fetcher = new Fetcher(cfg.exchange_settings)
-const dataProcessor = new DataProcessor(cfg.tickers.volatility.alerts,
-  cfg.tickers.stockmarket.warmup_period,
-  cfg.tickers.stockmarket.data_period,
-  cfg.tickers.stockmarket.indicators)
-const comm = new Communicate(bot, cfg.tickers.volatility.alerts, cfg.telegram_settings.chat_id)
+// Start Express Server
+app.listen(port, host, () => {
+  console.log(`INFO: Market Alert Index Bot v${version} is now running on ${host} on port ${port}.`)
+})
 
 /**
  * Triggers on cron job
