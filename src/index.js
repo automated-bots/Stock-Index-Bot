@@ -4,6 +4,7 @@ process.env.NTBA_FIX_350 = 1
 // Constants
 const port = process.env.PORT || 3008
 const host = process.env.HOST || '0.0.0.0'
+const isFake = process.env.NODE_ENV === 'fake'
 
 const fs = require('fs')
 const YAML = require('yaml')
@@ -32,7 +33,19 @@ console.log('INFO: VIX index Cron time: \'' + cfg.tickers.volatility.cron_time +
 console.log('INFO: GSPC index Cron time: \'' + cfg.tickers.stockmarket.cron_time + '\' with timezone: ' + cfg.tickers.stockmarket.cron_timezone)
 
 // Setup Telegram bot
-const bot = new TelegramBot(cfg.telegram_settings.bot_token)
+const bot = (isFake) ? {} : new TelegramBot(cfg.telegram_settings.bot_token)
+// For testing purpose only
+if (isFake) {
+  bot.setWebHook = (url, options = {}, fileOptions = {}) => { }
+  bot.onText = (regexp, callback) => {}
+  bot.sendMessage = (chatId, text, form = {}) => {
+    return new Promise(function (resolve, reject) {
+      console.log('Send Messaged (just a drill)! Chat ID: ' + chatId + ' with message: ' + text)
+      resolve()
+    })
+  }
+}
+
 // Inform the Telegram servers of the new webhook url
 bot.setWebHook(`${cfg.telegram_settings.public_url}/bot${TELEGRAM_SECRET_HASH}`)
 
