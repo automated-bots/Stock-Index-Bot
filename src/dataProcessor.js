@@ -65,16 +65,20 @@ class DataProcessor {
       csv.write(csvData, { headers: true }).pipe(ws)
     }
 
-    // Calculate highest & lowest prices from volatility index (^VIX)
-    const highPrices = todayPoints.map(data => data.high) // Use high price for highest calc
+    // Calculate highest & lowest points from volatility index (^VIX) in percentages
+    const highPrices = todayPoints.map(data => data.high) // Use high 'price' for highest calc
     const highestPrice = Math.max(...highPrices)
-    const lowPrices = todayPoints.map(data => data.low) // Use low price for lowest calc
+    const lowPrices = todayPoints.map(data => data.low) // Use low 'price' for lowest calc
     const lowestPrice = Math.min(...lowPrices)
 
     // Fill-in the volatility results
     if (highestPrice >= this.volatilityAlerts.extreme_high_threshold) {
       result.alert = true
       result.level = AlertLevels.EXTREME_HIGH_LEVEL
+      result.percentage = highestPrice
+    } else if (highestPrice >= this.volatilityAlerts.very_high_threshold) {
+      result.alert = true
+      result.level = AlertLevels.VERY_HIGH_LEVEL
       result.percentage = highestPrice
     } else if (highestPrice >= this.volatilityAlerts.high_threshold) {
       result.alert = true
@@ -106,7 +110,7 @@ class DataProcessor {
       }
     }
 
-    result.latest_close_price = latestPoint.close
+    result.latest_close_percentage = latestPoint.close
     result.latest_time = new Date(latestPoint.time)
     result.all_points = (todayPoints.length === maxDataPoints)
     return result

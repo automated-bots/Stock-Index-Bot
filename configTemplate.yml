@@ -20,8 +20,9 @@ tickers:
     alerts: # Note: Lower checks on <, higher checks on >=
       extreme_low_threshold: 8 # VIX index is < 8%
       low_threshold: 11 # VIX index is < 11%
-      high_threshold: 40 # VIX index is >= 40%
-      extreme_high_threshold: 60 # VIX index is >= 60%
+      high_threshold: 30 # VIX index is >= 30%
+      very_high_threshold: 50 # VIX index is >= 50%
+      extreme_high_threshold: 70 # VIX index is >= 70%
   stockmarket:
     params:
       symbol: "GSPC" # The S&P 500 Index

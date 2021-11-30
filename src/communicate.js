@@ -37,6 +37,7 @@ class Communicate {
       const data = this.readContent(TEMP_VOL_FILE)
       sendMessage = ((data.level !== result.level) && (currentLatestTime > data.time))
     } else {
+      console.warn('WARN: Missing volatility temp file on disk. First run?')
       sendMessage = true // Always send a message the first time, if file does not yet exists.
     }
 
@@ -44,7 +45,7 @@ class Communicate {
       if (result.alert && result.level !== AlertLevels.NO_ALERT) {
         message += '\n\n'
         const dateString = Util.dateToString(result.latest_time)
-        message += `CBOE Volatility Index (^VIX): *${result.percentage}%*. Latest Close: ${result.latest_close_price}. Latest date: ${dateString}.`
+        message += `CBOE Volatility Index (^VIX): *${result.percentage}%*. Latest Close: ${result.latest_close_percentage}%. Latest date: ${dateString}.`
         if (result.all_points) {
           message += ' _Market is closed now._'
         }
@@ -91,6 +92,7 @@ class Communicate {
         const data = this.readContent(TEMP_STOCK_FILE)
         sendMessage = (currentTime > data.time)
       } else {
+        console.warn('WARN: Missing stock market temp file on disk. First run?')
         sendMessage = true // Always send a message the first time, if file does not yet exists.
       }
 
@@ -133,7 +135,7 @@ class Communicate {
     console.log('INFO: Sending following message to Telegram channel: ' + message)
 
     this.bot.sendMessage(this.botChatID, message, this.sendMessageOptions).catch(error => {
-      console.log('ERROR: Could not send Telegram message: "' + message + '", due to error: ' + error.message)
+      console.error('ERROR: Could not send Telegram message: "' + message + '", due to error: ' + error.message)
       this.fatalError = true
     })
   }
@@ -147,13 +149,15 @@ class Communicate {
       case AlertLevels.NO_ALERT:
         return `^VIX returned to normal levels (>= ${this.volatilityAlerts.low_threshold}% and < ${this.volatilityAlerts.high_threshold}%). No alert.`
       case AlertLevels.EXTREME_LOW_LEVEL:
-        return `Extreme low limit threshold (${this.volatilityAlerts.extreme_low_threshold}%) of ^VIX has been reached.`
+        return `Extreme low limit threshold (${this.volatilityAlerts.extreme_low_threshold}%) of ^VIX has been reached. The market isn't volatile at all.`
       case AlertLevels.LOW_LEVEL:
-        return `Low limit threshold (${this.volatilityAlerts.low_threshold}%) of ^VIX has been reached.`
+        return `Low limit threshold (${this.volatilityAlerts.low_threshold}%) of ^VIX has been reached. The market is maybe too greedy.`
       case AlertLevels.HIGH_LEVEL:
-        return `High limit threshold (${this.volatilityAlerts.high_threshold}%) of ^VIX has been reached.`
+        return `High limit threshold (${this.volatilityAlerts.high_threshold}%) of ^VIX has been reached. Meaning quite some fear and uncertainty in the market.`
+      case AlertLevels.VERY_HIGH_LEVEL:
+        return `Very high limit threshold (${this.volatilityAlerts.very_high_threshold}%) of ^VIX has been reached. A lot of fear and uncertainty in the market.`
       case AlertLevels.EXTREME_HIGH_LEVEL:
-        return `Extreme high limit threshold (${this.volatilityAlerts.extreme_high_threshold}%) of ^VIX has been reached.`
+        return `Extreme high limit threshold (${this.volatilityAlerts.extreme_high_threshold}%) of ^VIX has been reached. The market is extremely fearful!`
       default:
         return 'Error: Unknown alert level?'
     }
@@ -173,14 +177,12 @@ class Communicate {
    * @returns content
    */
   readContent (fileName) {
-    let data = {}
     try {
       const raw = fs.readFileSync(fileName)
-      data = JSON.parse(raw)
+      return JSON.parse(raw)
     } catch (err) {
       console.error(err)
     }
-    return data
   }
 
   /**
