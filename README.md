@@ -54,6 +54,8 @@ Follow the steps:
 3. Install depedencies via: `npm install` (once needed)
 4. Start the bot using: `npm start`
 
+During development you could use: `npm run start-fake`. Which will start the app, but **not** connect to the TwelveData API.
+
 **Advice:** Run the bot 24/7 on some dedicated hardware. `cron_time` within the configuration will take care of the triggers when to look-up for data.
 
 **Hidden feature:** Set `DEBUG` to `true` value in the [dataProcessor.js](src/dataProcessor.js) source file to dump the market data to a comma-seperated values (CSV) file. Useful for off-line verification/calculations.
