@@ -35,11 +35,9 @@
     "yaml": "^1.10.2"
   },
   "devDependencies": {
-    "eslint": "^8.3.0",
-    "eslint-config-standard": "^16.0.3",
-    "eslint-plugin-import": "^2.25.3",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^5.1.1",
-    "eslint-plugin-standard": "^4.1.0"
+    "eslint-plugin-promise": "^6.0.1"
   }
 }
