@@ -1,8 +1,7 @@
 module.exports = {
   env: {
-    es6: true,
-    node: true,
-    mocha: true
+    es2021: true,
+    node: true
   },
   extends: [
     'standard'
@@ -13,10 +12,11 @@ module.exports = {
     TelegramSecretHash: 'writable'
   },
   parserOptions: {
-    ecmaVersion: 2018,
+    ecmaVersion: 'latest',
     sourceType: 'module'
   },
   rules: {
+    'object-shorthand': 0,
     'no-return-assign': 'off' // Allow assignment operator in return statement
   }
 }
