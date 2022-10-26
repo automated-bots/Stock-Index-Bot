@@ -16,8 +16,6 @@ class Communicate {
     this.botChatID = botChatID
     this.fatalError = false
     this.sendMessageOptions = { parse_mode: 'markdown', disable_web_page_preview: true }
-    // Notify channel about Bot booting-up (commented-out for now)
-    this.sendTelegramMessage('(Re)starting-up Bot... 🤓')
   }
 
   /**
@@ -29,7 +27,7 @@ class Communicate {
   sendVolatilityUpdate (result) {
     let sendMessage = false
     const currentLatestTime = result.latest_time.getTime()
-    let message = '❗*Stock Alert*❗\n^VIX ticker changed alert level: '
+    let message = '❗*Stock Alert*❗\nVIX ticker changed alert level: '
     // Inform the user regarding the change in alert level
     message += this.volatilityAlertToString(result.level)
 
@@ -45,18 +43,18 @@ class Communicate {
       if (result.alert && result.level !== AlertLevels.NO_ALERT) {
         message += '\n\n'
         const dateString = Util.dateToString(result.latest_time)
-        message += `CBOE Volatility Index (^VIX): *${result.percentage}%*. Latest Close: ${result.latest_close_percentage}%. Latest date: ${dateString}.`
+        message += `CBOE Volatility Index (VIX): *${result.percentage}%*. Latest Close: ${result.latest_close_percentage}%. Latest date: ${dateString}.`
         if (result.all_points) {
           message += ' _Market is closed now._'
         }
-        message += '\n\n[Open ^VIX Chart](https://www.tradingview.com/chart?symbol=TVC%3AVIX)'
+        message += '\n\n[Open VIX Chart](https://www.tradingview.com/chart?symbol=TVC%3AVIX)'
         this.sendTelegramMessage(message)
 
         // Process dual-alert (if applicable)
         if (result.dual_alert.alert) {
           let dualMessage = '❗*Stock Alert*❗\nVIX ticker changed twice the alert level within a day: '
           dualMessage += this.volatilityAlertToString(result.dual_alert.level) + '!\n'
-          dualMessage += `CBOE Volatility Index (^VIX): *${result.dual_alert.percentage}%*`
+          dualMessage += `CBOE Volatility Index (VIX): *${result.dual_alert.percentage}%*`
           this.sendTelegramMessage(dualMessage)
         }
       } else {
@@ -97,7 +95,7 @@ class Communicate {
       }
 
       if (sendMessage) {
-        let message = '❗*Stock Alert*❗\nS&P 500 index (^SPX) changed in market trend: '
+        let message = '❗*Stock Alert*❗\nS&P 500 index (SPX) changed in market trend: '
         const dateString = Util.dateToString(cross.time, true)
         const histogram = cross.hist.toFixed(4)
         const prevHistogram = cross.prevHist.toFixed(4)
@@ -113,7 +111,7 @@ class Communicate {
             break
         }
         message += `\n\nHistogram: ${histogram}% (before: ${prevHistogram}%). High: ${high}. Low: ${low}. Close: ${close}. MACD cross date: ${dateString}.`
-        message += '\n\n[Open ^SPX Chart](https://www.tradingview.com/chart?symbol=SP%3ASPX)'
+        message += '\n\n[Open SPX Chart](https://www.tradingview.com/chart?symbol=SP%3ASPX)'
         this.sendTelegramMessage(message)
         messageSent = true // Only for debug logging
 

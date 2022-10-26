@@ -24,7 +24,7 @@ class DataProcessor {
   /**
    * Process the intraday (5 min) candle data,
    * only process the last day volatility data points
-   * @param {Array} volatilityData Volatility index data series (^VIX)
+   * @param {Array} volatilityData Volatility index data series (VIX)
    * @returns Results structure
    */
   processVolatility (volatilityData) {
@@ -117,10 +117,10 @@ class DataProcessor {
   }
 
   /**
-   * Process the S&P 500 (^GSPC) index, using weekly data.
+   * Process the S&P 500 (GSPC) index, using weekly data.
    * It's creating a PPO (%) indicator, then checking on MACD crosses from the histogram (PPO - Signal Line)
    *
-   * @param {Array} sp500Data ^GSPC index data
+   * @param {Array} sp500Data GSPC index data
    * @returns Result structure
    */
   processStockMarket (sp500Data) {
