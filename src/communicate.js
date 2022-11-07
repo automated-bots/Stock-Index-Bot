@@ -58,7 +58,7 @@ class Communicate {
           this.sendTelegramMessage(dualMessage)
         }
       } else {
-        // Back to normal: curently no alert and still a change in alert level (with respect to previous alert level)
+        // Back to normal: currently no alert and still a change in alert level (with respect to previous alert level)
         this.sendTelegramMessage(message)
       }
     } else {

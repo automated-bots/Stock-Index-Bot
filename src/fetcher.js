@@ -46,7 +46,7 @@ class Fetcher {
       try {
         const response = await this.api.get('/time_series', { params: params })
         if (!Object.prototype.hasOwnProperty.call(response.data, 'values')) {
-          return Promise.reject(new Error('Missing values key in response. HTTP status code: ' + response.status + ' with text : ' + response.statusText + '. Reponse:\n' + JSON.stringify(response.data)))
+          return Promise.reject(new Error('Missing values key in response. HTTP status code: ' + response.status + ' with text : ' + response.statusText + '. Response:\n' + JSON.stringify(response.data)))
         }
         return this.postProcessingTimeseries(response.data.values, cacheFile)
       } catch (error) {

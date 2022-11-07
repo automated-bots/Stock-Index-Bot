@@ -129,7 +129,7 @@ class DataProcessor {
     // Create technical indicator (Percentage Price Oscillator: PPO)
     const ppo = new PPO(this.indicatorsConfig.PPO.short, this.indicatorsConfig.PPO.long, this.indicatorsConfig.PPO.signal)
 
-    // Strip down the data series to just what is needed for warming-up fase + data period
+    // Strip down the data series to just what is needed for warming-up phase + data period
     let nrOfDataPoints = this.warmupPeriod + this.dataPeriod
     let firstIndexUsed = (sp500Data.length - 1) - (this.dataPeriod - 1)
     if (sp500Data.length < nrOfDataPoints) {
