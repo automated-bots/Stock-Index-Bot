@@ -4,8 +4,8 @@
 
 For now it's using the following market data:
 
-* [Volatility Index](https://www.tradingview.com/chart?symbol=TVC%3AVIX) - [VIX CBOE](http://www.cboe.com/products/vix-index-volatility/volatility-indexes)
-* [S&P500 Index](https://www.tradingview.com/chart?symbol=SP%3ASPX) - [companies by Weight](https://www.slickcharts.com/sp500) (aka S&P 500 index)
+- [Volatility Index](https://www.tradingview.com/chart?symbol=TVC%3AVIX) - [VIX CBOE](http://www.cboe.com/products/vix-index-volatility/volatility-indexes)
+- [S&P500 Index](https://www.tradingview.com/chart?symbol=SP%3ASPX) - [companies by Weight](https://www.slickcharts.com/sp500) (aka S&P 500 index)
 
 This bot will inform you via Telegram, when a certain threshold limit is reached on the VIX volatility market index (on NYSE)
 and or whenever there is an up- or downtrend in the S&P 500 market. Technical analysis is applied to determine the up- or downtrend of the S&P 500 index.
@@ -14,13 +14,13 @@ and or whenever there is an up- or downtrend in the S&P 500 market. Technical an
 
 This bot is written in JavaScript and run on NodeJS.
 
-* [NodeJS 14 or higher](https://nodejs.org/en/download/)
+- [NodeJS 14 or higher](https://nodejs.org/en/download/)
 
 ## Usage
 
 You can join the public [Stock Exchange Telegram channel](https://t.me/stock_exchange_updates), where this bot is connected to.
 
-*Or* since this project is open-source, you can setup your own `index-bot` as well as your own [Telegram Bot](https://core.telegram.org/bots). See below.
+_Or_ since this project is open-source, you can setup your own `index-bot` as well as your own [Telegram Bot](https://core.telegram.org/bots). See below.
 
 ## Run it yourself
 
@@ -30,18 +30,18 @@ Use the [DockerHub Docker image](https://hub.docker.com/repository/docker/danger
 
 1. Copy/rename the [config template file](configTemplate.yml) to `config.yml`, can be stored anywhere on your machine:
 
-    ```sh
-    cp configTemplate.yml config.yml
-    ```
+   ```sh
+   cp configTemplate.yml config.yml
+   ```
 
 2. Now change the `config.yml` to your needs (see "Most important Settings" section below).
 3. Start Docker container by providing the `config.yml` from outside the Docker container (by default using current working directory, `pwd`, on your host machine):
 
-    ```sh
-    docker run --restart always -p 127.0.0.1:3008:3008 -v $(pwd)/config.yml:/app/config.yml -d danger89/index-bot
-    ```
+   ```sh
+   docker run --restart always -p 127.0.0.1:3008:3008 -v $(pwd)/config.yml:/app/config.yml -d danger89/index-bot
+   ```
 
-*Note:* The command above should pull the image automatically from Docker Hub.
+_Note:_ The command above should pull the image automatically from Docker Hub.
 
 You can also use `docker-compose`, see [docker-compose.yml](docker-compose.yml).
 
@@ -51,7 +51,7 @@ Follow the steps:
 
 1. Copy the config template to `config.yml`: `cp configTemplate.yml config.yml`
 2. Change the configuration settings, webhook domain for Telegram bot and API keys for the stock data
-3. Install depedencies via: `npm install` (once needed)
+3. Install dependencies via: `npm install` (once needed)
 4. Start the bot using: `npm start`
 
 During development you could use: `npm run start-fake`. Which will start the app, but **not** connect to the TwelveData API.
@@ -64,16 +64,16 @@ During development you could use: `npm run start-fake`. Which will start the app
 
 The following settings require definitely some attention during setup:
 
-* `exchange_settings -> use_cache` - Set to `False` to not use any local caching, needed for production!
-* `exchange_settings -> api_key` - TwelveData API Key (create one on [their site](https://twelvedata.com/login))
-* `telegram_settings -> bot_token` - Token from Telegram, created via [@BotFather](https://telegram.me/BotFather)
-* `telegram_settings -> public_url` - Telegram public URL for Webhook
-* `telegram_settings -> chat_id` - Telegram channel name including '@' or any other chat ID.
+- `exchange_settings -> use_cache` - Set to `False` to not use any local caching, needed for production!
+- `exchange_settings -> api_key` - TwelveData API Key (create one on [their site](https://twelvedata.com/login))
+- `telegram_settings -> bot_token` - Token from Telegram, created via [@BotFather](https://telegram.me/BotFather)
+- `telegram_settings -> public_url` - Telegram public URL for Webhook
+- `telegram_settings -> chat_id` - Telegram channel name including '@' or any other chat ID.
 
 There are also 2 environment variables available to set:
 
-* `HOST` (default: `0.0.0.0`)
-* `PORT` (default: `3008`)
+- `HOST` (default: `0.0.0.0`)
+- `PORT` (default: `3008`)
 
 ## License
 
@@ -81,5 +81,5 @@ There are also 2 environment variables available to set:
 
 ## Useful links
 
-* [More info about VIX](https://www.veb.net/artikel/06263/7-vragen-over-de-vix-index) (Dutch)
-* [More info about S&P 500](https://www.lynx.nl/kennis/artikelen/sp-500-index-alles-populairste-speler/) (Dutch)
+- [More info about VIX](https://www.veb.net/artikel/06263/7-vragen-over-de-vix-index) (Dutch)
+- [More info about S&P 500](https://www.lynx.nl/kennis/artikelen/sp-500-index-alles-populairste-speler/) (Dutch)

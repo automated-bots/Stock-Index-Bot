@@ -83,7 +83,7 @@ class Communicate {
     let messageSent = false
     for (const cross of result.crosses) {
       let sendMessage = false
-      // Only send messages that are newer that the previous send onces (don't spam)
+      // Only send messages that are newer that the previous send once (don't spam)
       const currentTime = cross.time.getTime()
 
       if (fs.existsSync(TEMP_STOCK_FILE)) {
