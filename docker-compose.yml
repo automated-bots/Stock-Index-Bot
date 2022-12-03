@@ -4,8 +4,13 @@ services:
     image: danger89/index-bot:latest
     container_name: index_bot
     restart: always
+    networks:
+      - index_bot_external_network
     volumes:
       - /home/username/folder/to/config.yml:/app/config.yml
       - /home/username/folder/to/tmp:/app/tmp
     ports:
       - "3008:3008"
+
+networks:
+  index_bot_external_network:
