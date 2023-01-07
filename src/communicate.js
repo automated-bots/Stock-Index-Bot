@@ -14,7 +14,6 @@ class Communicate {
     this.bot = bot
     this.volatilityAlerts = volatilityAlerts
     this.botChatID = botChatID
-    this.fatalError = false
     this.sendMessageOptions = { parse_mode: 'markdown', disable_web_page_preview: true }
   }
 
@@ -134,7 +133,7 @@ class Communicate {
 
     this.bot.sendMessage(this.botChatID, message, this.sendMessageOptions).catch(error => {
       console.error('ERROR: Could not send Telegram message: "' + message + '", due to error: ' + error.message)
-      this.fatalError = true
+      global.ErrorState = true
     })
   }
 
@@ -159,14 +158,6 @@ class Communicate {
       default:
         return 'Error: Unknown alert level?'
     }
-  }
-
-  /**
-   * Retrieve fatal error state
-   * @returns true if an fatal error ever occurred. Otherwise false.
-   */
-  isError () {
-    return this.fatalError
   }
 
   /**
