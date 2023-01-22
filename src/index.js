@@ -66,6 +66,7 @@ const dataProcessor = new DataProcessor(cfg.tickers.volatility.alerts,
 const comm = new Communicate(bot, cfg.tickers.volatility.alerts, cfg.telegram_settings.chat_id)
 
 const app = express()
+app.disable('x-powered-by')
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
