@@ -76,7 +76,7 @@ app.post(`/bot${TELEGRAM_SECRET_HASH}`, (req, res) => {
   res.sendStatus(200)
 })
 // Display version
-app.get('/', (req, res) => res.send('<h1>Market data bot</h1> Market data index bot v' + version + '. <br/><br/>By: Melroy van den Berg'))
+app.get('/', (req, res) => res.send('<h1>Stock market data bot</h1> Stock market index bot v' + version + '. <br/><br/>By: Melroy van den Berg'))
 
 // Test APIs
 app.get(`/test_api/${TEST_API_SECRET_HASH}/volatil`, (req, res) => {

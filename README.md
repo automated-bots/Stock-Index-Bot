@@ -1,4 +1,4 @@
-# Stock Index Alert Bot
+# Stock Market Index Alert Bot
 
 `index-bot` is an open-source stock (forex) bot that uses the the following data to notify the user via Telegram.
 
@@ -14,7 +14,7 @@ and or whenever there is an up- or downtrend in the S&P 500 market. Technical an
 
 This bot is written in JavaScript and run on NodeJS.
 
-- [NodeJS 14 or higher](https://nodejs.org/en/download/)
+- [NodeJS LTS](https://nodejs.org/en/download/)
 
 ## Usage
 
