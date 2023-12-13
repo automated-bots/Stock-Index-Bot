@@ -34,7 +34,7 @@ class Communicate {
       const data = this.readContent(TEMP_VOL_FILE)
       sendMessage = ((data.level !== result.level) && (currentLatestTime > data.time))
     } else {
-      console.warn('WARN: Missing volatility temp file on disk. First run?')
+      console.warn('WARN: Missing volatility temp file on disk\\. First run?')
       sendMessage = true // Always send a message the first time, if file does not yet exists.
     }
 
@@ -42,9 +42,9 @@ class Communicate {
       if (result.alert && result.level !== AlertLevels.NO_ALERT) {
         message += '\n\n'
         const dateString = Util.dateToString(result.latest_time)
-        message += `CBOE Volatility Index (VIX): *${result.percentage}%*. Latest Close: ${result.latest_close_percentage}%. Latest date: ${dateString}.`
+        message += `CBOE Volatility Index \\(VIX\\): *${result.percentage}%*\\. Latest Close: ${result.latest_close_percentage}%\\. Latest date: ${dateString}\\.`
         if (result.all_points) {
-          message += ' _Market is closed now._'
+          message += ' _Market is closed now\\._'
         }
         message += '\n\n[Open VIX Chart](https://www.tradingview.com/chart?symbol=TVC%3AVIX)'
         this.sendTelegramMessage(message)
@@ -52,8 +52,8 @@ class Communicate {
         // Process dual-alert (if applicable)
         if (result.dual_alert.alert) {
           let dualMessage = '❗*Stock Alert*❗\nVIX ticker changed twice the alert level within a day: '
-          dualMessage += this.volatilityAlertToString(result.dual_alert.level) + '!\n'
-          dualMessage += `CBOE Volatility Index (VIX): *${result.dual_alert.percentage}%*`
+          dualMessage += this.volatilityAlertToString(result.dual_alert.level) + '\\!\n'
+          dualMessage += `CBOE Volatility Index \\(VIX\\): *${result.dual_alert.percentage}%*`
           this.sendTelegramMessage(dualMessage)
         }
       } else {
@@ -94,22 +94,22 @@ class Communicate {
       }
 
       if (sendMessage) {
-        let message = '❗*Stock Alert*❗\nS&P 500 index (SPX) changed in market trend: '
+        let message = '❗*Stock Alert*❗\nS&P 500 index \\(SPX\\) changed in market trend: '
         const dateString = Util.dateToString(cross.time, true)
-        const histogram = cross.hist.toFixed(4)
-        const prevHistogram = cross.prevHist.toFixed(4)
-        const high = cross.high.toFixed(1)
-        const low = cross.low.toFixed(1)
-        const close = cross.close.toFixed(1)
+        const histogram = cross.hist.toFixed(4).toString().replace('.', '\\.').replace('-', '\\-')
+        const prevHistogram = cross.prevHist.toFixed(4).toString().replace('.', '\\.').replace('-', '\\-')
+        const high = cross.high.toFixed(1).toString().replace('.', '\\.')
+        const low = cross.low.toFixed(1).toString().replace('.', '\\.')
+        const close = cross.close.toFixed(1).toString().replace('.', '\\.')
         switch (cross.type) {
           case 'bearish':
-            message += 'towards a bearish trend 🌧.'
+            message += 'towards a bearish trend 🌧\\.'
             break
           case 'bullish':
-            message += 'towards a bullish trend 🔆!'
+            message += 'towards a bullish trend 🔆\\!'
             break
         }
-        message += `\n\nHistogram: ${histogram}% (before: ${prevHistogram}%). High: ${high}. Low: ${low}. Close: ${close}. MACD cross date: ${dateString}.`
+        message += `\n\nHistogram: ${histogram}% \\(before: ${prevHistogram}%\\)\\. High: ${high}\\. Low: ${low}\\. Close: ${close}\\. MACD cross date: ${dateString}\\.`
         message += '\n\n[Open SPX Chart](https://www.tradingview.com/chart?symbol=SP%3ASPX)'
         this.sendTelegramMessage(message)
         messageSent = true // Only for debug logging
@@ -144,17 +144,17 @@ class Communicate {
   volatilityAlertToString (level) {
     switch (level) {
       case AlertLevels.NO_ALERT:
-        return `^VIX returned to normal levels (>= ${this.volatilityAlerts.low_threshold}% and < ${this.volatilityAlerts.high_threshold}%). No alert.`
+        return `^VIX returned to normal levels \\(\\>\\= ${this.volatilityAlerts.low_threshold}% and \\< ${this.volatilityAlerts.high_threshold}%\\)\\. No alert\\.`
       case AlertLevels.EXTREME_LOW_LEVEL:
-        return `Extreme low limit threshold (${this.volatilityAlerts.extreme_low_threshold}%) of ^VIX has been reached. The market isn't volatile at all.`
+        return `Extreme low limit threshold \\(${this.volatilityAlerts.extreme_low_threshold}%\\) of ^VIX has been reached\\. The market isn't volatile at all\\.`
       case AlertLevels.LOW_LEVEL:
-        return `Low limit threshold (${this.volatilityAlerts.low_threshold}%) of ^VIX has been reached. The market is maybe too greedy.`
+        return `Low limit threshold \\(${this.volatilityAlerts.low_threshold}%\\) of ^VIX has been reached\\. The market is maybe too greedy\\.`
       case AlertLevels.HIGH_LEVEL:
-        return `High limit threshold (${this.volatilityAlerts.high_threshold}%) of ^VIX has been reached. Meaning quite some fear and uncertainty in the market.`
+        return `High limit threshold \\(${this.volatilityAlerts.high_threshold}%\\) of ^VIX has been reached\\. Meaning quite some fear and uncertainty in the market\\.`
       case AlertLevels.VERY_HIGH_LEVEL:
-        return `Very high limit threshold (${this.volatilityAlerts.very_high_threshold}%) of ^VIX has been reached. A lot of fear and uncertainty in the market.`
+        return `Very high limit threshold \\(${this.volatilityAlerts.very_high_threshold}%\\) of ^VIX has been reached\\. A lot of fear and uncertainty in the market\\.`
       case AlertLevels.EXTREME_HIGH_LEVEL:
-        return `Extreme high limit threshold (${this.volatilityAlerts.extreme_high_threshold}%) of ^VIX has been reached. The market is extremely fearful!`
+        return `Extreme high limit threshold \\(${this.volatilityAlerts.extreme_high_threshold}%\\) of ^VIX has been reached\\. The market is extremely fearful\\!`
       default:
         return 'Error: Unknown alert level?'
     }
