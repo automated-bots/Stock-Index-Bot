@@ -14,7 +14,7 @@ class Communicate {
     this.bot = bot
     this.volatilityAlerts = volatilityAlerts
     this.botChatID = botChatID
-    this.sendMessageOptions = { parse_mode: 'markdown', disable_web_page_preview: true }
+    this.sendMessageOptions = { parse_mode: 'MarkdownV2', disable_web_page_preview: true }
   }
 
   /**
