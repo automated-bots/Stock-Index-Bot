@@ -1,4 +1,3 @@
-version: "3"
 services:
   index_bot:
     image: registry.melroy.org/melroy/index-bot/index-bot:latest
