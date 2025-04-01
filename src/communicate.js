@@ -35,7 +35,7 @@ class Communicate {
       const data = this.readContent(TEMP_VOL_FILE)
       sendMessage = ((data.level !== result.level) && (currentLatestTime > data.time))
     } else {
-      logger.warn('WARN: Missing volatility temp file on disk\\. First run?')
+      logger.warn('Missing volatility temp file on disk\\. First run?')
       sendMessage = true // Always send a message the first time, if file does not yet exists.
     }
 
@@ -62,7 +62,7 @@ class Communicate {
         this.sendTelegramMessage(message)
       }
     } else {
-      logger.info('DEBUG: No new volatility change detected. Do not send a message.')
+      logger.debug('No new volatility change detected. Do not send a message.') 
     }
 
     // Write data to disk
@@ -90,7 +90,7 @@ class Communicate {
         const data = this.readContent(TEMP_STOCK_FILE)
         sendMessage = (currentTime > data.time)
       } else {
-        logger.warn('WARN: Missing stock market temp file on disk. First run?')
+        logger.warn('Missing stock market temp file on disk. First run?')
         sendMessage = true // Always send a message the first time, if file does not yet exists.
       }
 
@@ -122,7 +122,7 @@ class Communicate {
       }
     }
     if (messageSent === false) {
-      logger.info('DEBUG: No new S&P500 index crosses detected. Do not send a message update.')
+      logger.debug('No new S&P500 index crosses detected. Do not send a message update.')
     }
   }
 
@@ -130,10 +130,10 @@ class Communicate {
    * Helper method for sending the message to Telegram bot
    */
   sendTelegramMessage (message) {
-    logger.info('INFO: Sending following message to Telegram channel: ' + message)
+    logger.info('Sending following message to Telegram channel: ' + message)
 
     this.bot.sendMessage(this.botChatID, message, this.sendMessageOptions).catch(error => {
-      logger.error('ERROR: Could not send Telegram message: "' + message + '", due to error: ' + error.message)
+      logger.error('Could not send Telegram message: "' + message + '", due to error: ' + error.message)
       global.ErrorState = true
     })
   }
