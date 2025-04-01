@@ -3,6 +3,7 @@ const PPO = require('./indicators/ppo')
 const Util = require('./util')
 const csv = require('fast-csv')
 const fs = require('fs')
+const logger = require('./logger')
 
 // Dump CSV debug data (true/false)
 const DEBUG = false
@@ -133,11 +134,11 @@ class DataProcessor {
     let nrOfDataPoints = this.warmupPeriod + this.dataPeriod
     let firstIndexUsed = (sp500Data.length - 1) - (this.dataPeriod - 1)
     if (sp500Data.length < nrOfDataPoints) {
-      console.error('ERROR: Not enough data received from API')
+      logger.error('ERROR: Not enough data received from API')
       nrOfDataPoints = sp500Data.length
     }
     if (firstIndexUsed < 0) {
-      console.error('ERROR: Index of first used data point out-of-range.')
+      logger.error('ERROR: Index of first used data point out-of-range.')
       firstIndexUsed = 0
     }
     const lastDataPoints = sp500Data.slice(sp500Data.length - nrOfDataPoints, sp500Data.length)

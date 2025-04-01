@@ -1,6 +1,7 @@
 const axios = require('axios')
 const fs = require('fs')
 const Candle = require('./candle')
+const logger = require('./logger')
 
 /**
  * History fetcher to get/load historical data
@@ -50,7 +51,7 @@ class Fetcher {
         }
         return this.postProcessingTimeseries(response.data.values, cacheFile)
       } catch (error) {
-        console.log(error)
+        logger.error(error)
         throw new Error(error)
       }
     }

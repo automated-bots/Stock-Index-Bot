@@ -1,5 +1,6 @@
 const AlertLevels = require('./alertLevelsEnum')
 const Util = require('./util')
+const logger = require('./logger')
 const fs = require('fs')
 const TEMP_VOL_FILE = './tmp/tmp-vol-data.json'
 const TEMP_STOCK_FILE = './tmp/tmp-stock-data.json'
@@ -34,7 +35,7 @@ class Communicate {
       const data = this.readContent(TEMP_VOL_FILE)
       sendMessage = ((data.level !== result.level) && (currentLatestTime > data.time))
     } else {
-      console.warn('WARN: Missing volatility temp file on disk\\. First run?')
+      logger.warn('WARN: Missing volatility temp file on disk\\. First run?')
       sendMessage = true // Always send a message the first time, if file does not yet exists.
     }
 
@@ -61,7 +62,7 @@ class Communicate {
         this.sendTelegramMessage(message)
       }
     } else {
-      console.log('DEBUG: No new volatility change detected. Do not send a message.')
+      logger.info('DEBUG: No new volatility change detected. Do not send a message.')
     }
 
     // Write data to disk
@@ -89,7 +90,7 @@ class Communicate {
         const data = this.readContent(TEMP_STOCK_FILE)
         sendMessage = (currentTime > data.time)
       } else {
-        console.warn('WARN: Missing stock market temp file on disk. First run?')
+        logger.warn('WARN: Missing stock market temp file on disk. First run?')
         sendMessage = true // Always send a message the first time, if file does not yet exists.
       }
 
@@ -121,7 +122,7 @@ class Communicate {
       }
     }
     if (messageSent === false) {
-      console.log('DEBUG: No new S&P500 index crosses detected. Do not send a message update.')
+      logger.info('DEBUG: No new S&P500 index crosses detected. Do not send a message update.')
     }
   }
 
@@ -129,10 +130,10 @@ class Communicate {
    * Helper method for sending the message to Telegram bot
    */
   sendTelegramMessage (message) {
-    console.log('INFO: Sending following message to Telegram channel: ' + message)
+    logger.info('INFO: Sending following message to Telegram channel: ' + message)
 
     this.bot.sendMessage(this.botChatID, message, this.sendMessageOptions).catch(error => {
-      console.error('ERROR: Could not send Telegram message: "' + message + '", due to error: ' + error.message)
+      logger.error('ERROR: Could not send Telegram message: "' + message + '", due to error: ' + error.message)
       global.ErrorState = true
     })
   }
@@ -170,7 +171,7 @@ class Communicate {
       const raw = fs.readFileSync(fileName)
       return JSON.parse(raw)
     } catch (err) {
-      console.error(err)
+      logger.error(err)
     }
   }
 
@@ -184,7 +185,7 @@ class Communicate {
     try {
       fs.writeFileSync(fileName, data)
     } catch (err) {
-      console.error(err)
+      logger.error(err)
     }
   }
 }
