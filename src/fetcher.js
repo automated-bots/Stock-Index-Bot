@@ -44,7 +44,7 @@ class Fetcher {
       }
       // Both data arrays should contain data bout OHLC and datetime
       try {
-        const response = await this.api.get('/time_series', { params: params })
+        const response = await this.api.get('/time_series', { params })
         if (!Object.prototype.hasOwnProperty.call(response.data, 'values')) {
           return Promise.reject(new Error('Missing values key in response. HTTP status code: ' + response.status + ' with text : ' + response.statusText + '. Response:\n' + JSON.stringify(response.data)))
         }

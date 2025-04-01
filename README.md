@@ -15,6 +15,7 @@ and or whenever there is an up- or downtrend in the S&P 500 market. Technical an
 This bot is written in JavaScript and run on NodeJS.
 
 - [NodeJS LTS](https://nodejs.org/en/download/)
+- pnpm
 
 ## Usage
 
@@ -51,10 +52,10 @@ Follow the steps:
 
 1. Copy the config template to `config.yml`: `cp configTemplate.yml config.yml`
 2. Change the configuration settings, webhook domain for Telegram bot and API keys for the stock data
-3. Install dependencies via: `npm install` (once needed)
-4. Start the bot using: `npm start`
+3. Install dependencies via: `pnpm install` (once needed)
+4. Start the bot using: `pnpm start`
 
-During development you could use: `npm run start-fake`. Which will start the app, but **not** connect to the TwelveData API.
+During development you could use: `pnpm run start-fake`. Which will start the app, but **not** connect to the TwelveData API.
 
 **Advice:** Run the bot 24/7 on some dedicated hardware. `cron_time` within the configuration will take care of the triggers when to look-up for data.
 

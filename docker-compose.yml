@@ -1,7 +1,7 @@
 version: "3"
 services:
   index_bot:
-    image: danger89/index-bot:latest
+    image: registry.melroy.org/melroy/index-bot/index-bot:latest
     container_name: index_bot
     restart: always
     networks:
