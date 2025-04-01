@@ -3,6 +3,7 @@
   "version": "1.3.0",
   "description": "VIX Index bot notifier",
   "main": "src/index.js",
+  "packageManager": "pnpm@10.7.1",
   "scripts": {
     "start": "node .",
     "start-fake": "NODE_ENV=fake node .",
