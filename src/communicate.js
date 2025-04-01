@@ -62,7 +62,7 @@ class Communicate {
         this.sendTelegramMessage(message)
       }
     } else {
-      logger.debug('No new volatility change detected. Do not send a message.') 
+      logger.debug('No new volatility change detected. Do not send a message.')
     }
 
     // Write data to disk
