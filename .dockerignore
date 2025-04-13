@@ -1,18 +1,23 @@
-.git
+# Config file
+config.yml
+
+scripts
 data
 node_modules
+docker-compose.yml
 Dockerfile
 CODEOWNERS
 
 /tmp/tmp-*-data.json
 /cachedData.json
 /cachedDataWeekly.json
-config.yml
 debug.csv
 *.sh
 *.md
 
 # Hidden files
+.git
+.gitignore
 .dockerignore
 .eslintrc.js
 .gitignore
